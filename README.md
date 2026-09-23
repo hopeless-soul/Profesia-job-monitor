@@ -1,5 +1,8 @@
 # Profesia job monitor
 
+> [!IMPORTANT]
+> The project is mainly vibe coded, so it's probably poorly structured.
+
 Watches [Profesia.sk](https://www.profesia.sk) for new job offers. It runs continuously, scrapes your searches once an hour, keeps every offer (unique by ID) in `jobs.json`, and sends new ones to Telegram subscribers.
 
 ## Setup
