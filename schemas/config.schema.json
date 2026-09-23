@@ -1,0 +1,136 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/hopeless-soul/Profesia-job-monitor/schemas/config.schema.json",
+  "title": "Profesia job monitor config",
+  "description": "Read from config.json by default. Every search is scraped and merged into the same jobs file. Filter values are documented in salvage.md.",
+  "type": "object",
+  "required": [
+    "searches"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "out": {
+      "type": "string",
+      "default": "jobs.json",
+      "description": "Jobs file. Relative paths resolve against the config file's folder."
+    },
+    "pages": {
+      "type": "integer",
+      "minimum": 1,
+      "default": 3,
+      "description": "Max listing pages per search (20 offers per page)."
+    },
+    "delay": {
+      "type": "number",
+      "minimum": 0,
+      "default": 1.5,
+      "description": "Seconds between page requests."
+    },
+    "interval": {
+      "type": "number",
+      "exclusiveMinimum": 0,
+      "default": 60,
+      "description": "Minutes between scrapes. The script runs forever; use --once for a single run."
+    },
+    "count_days": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "minimum": 1,
+      "default": null,
+      "description": "Only offers posted in the last N days (any whole number works). Offers expire after ~31 days, so 31+ equals no filter. Top-level value applies to every search; a search's own count_days overrides it."
+    },
+    "searches": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/Search"
+      }
+    },
+    "telegram": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Telegram notifications. Users subscribe by sending /start to the bot and unsubscribe with /stop.",
+      "properties": {
+        "token": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "default": null,
+          "description": "Bot token from @BotFather. Null falls back to the TELEGRAM_BOT_TOKEN env var; with neither, notifications are off. Keep it out of git."
+        },
+        "subscribers": {
+          "type": "string",
+          "default": "subscribers.json",
+          "description": "Subscriber list and update offset. Relative paths resolve against the config file's folder."
+        }
+      }
+    }
+  },
+  "$defs": {
+    "Search": {
+      "type": "object",
+      "required": [
+        "keyword"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "keyword": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Free-text search (search_anywhere), e.g. \"c#\"."
+        },
+        "segments": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[a-z0-9-]+$"
+          },
+          "default": [],
+          "description": "Path filters: region (bratislavsky-kraj), position (programator-programatorka), employment type (plny-uvazok), work area (informacne-technologie), company type (zamestnavatelia), language (anglicky-jazyk)."
+        },
+        "remote_work": {
+          "enum": [
+            0,
+            1,
+            2,
+            null
+          ],
+          "default": null,
+          "description": "0 = on-site only, 1 = remote only, 2 = partially remote, null = any."
+        },
+        "min_salary": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "exclusiveMinimum": 0,
+          "default": null,
+          "description": "Minimum salary in EUR. Site presets: monthly 600-2500, hourly 4-15."
+        },
+        "salary_period": {
+          "enum": [
+            "m",
+            "h"
+          ],
+          "default": "m",
+          "description": "m = monthly, h = hourly. Only used with min_salary."
+        },
+        "count_days": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 1,
+          "default": null,
+          "description": "Overrides the top-level count_days for this search."
+        }
+      }
+    }
+  }
+}

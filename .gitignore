@@ -1,0 +1,9 @@
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+jobs.json
+*.db
+config.json
+subscribers.json
+*.log

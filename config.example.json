@@ -1,0 +1,28 @@
+{
+  "$schema": "./schemas/config.schema.json",
+  "out": "jobs.json",
+  "pages": 3,
+  "delay": 1.5,
+  "interval": 60,
+  "count_days": 7,
+  "searches": [
+    {
+      "keyword": "c#",
+      "segments": ["bratislavsky-kraj"],
+      "remote_work": 2,
+      "min_salary": 2000,
+      "salary_period": "m"
+    },
+    {
+      "keyword": "python",
+      "segments": ["informacne-technologie", "plny-uvazok"],
+      "remote_work": null,
+      "min_salary": null,
+      "salary_period": "m"
+    }
+  ],
+  "telegram": {
+    "token": null,
+    "subscribers": "subscribers.json"
+  }
+}
